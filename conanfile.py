@@ -11,7 +11,7 @@ class VTKConan(ConanFile):
     generators = "cmake"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "qt": [True, False],"cygwin_msvc": [True, False],"linux_use_sudo": [True, False]}
-    default_options = "shared=False", "qt=False", "cygwin_msvc=False", "linux_use_sudo=True"
+    default_options = "shared=True", "qt=False", "cygwin_msvc=False", "linux_use_sudo=False"
     exports = ["CMakeLists.txt", "FindVTK.cmake"]
     url="http://github.com/pkarasev3/conan-vtk"
     license="http://www.vtk.org/licensing/"
