@@ -11,7 +11,7 @@ class VTKConan(ConanFile):
     generators = "cmake"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "qt": [True, False],"cygwin_msvc": [True, False],"linux_use_sudo": [True, False]}
-    default_options = "shared=False", "qt=False", "cygwin_msvc=False", "linux_use_sudo=True"
+    default_options = "shared=True", "qt=False", "cygwin_msvc=False", "linux_use_sudo=False"
     exports = ["CMakeLists.txt", "FindVTK.cmake"]
     url="http://github.com/pkarasev3/conan-vtk"
     license="http://www.vtk.org/licensing/"
@@ -19,7 +19,7 @@ class VTKConan(ConanFile):
 
     ZIP_FOLDER_NAME = "VTK-%s" % version
     INSTALL_DIR = "_install"
-    CMAKE_OPTIONS = "-DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF"
+    CMAKE_OPTIONS = "-DBUILD_TESTING=OFF -DBUILD_EXAMPLES=ON"
 
     def source(self):
         zip_name = self.ZIP_FOLDER_NAME + ".zip"
@@ -71,6 +71,18 @@ class VTKConan(ConanFile):
     def package(self):
         self.copy("FindVTK.cmake", ".", ".")
         self.copy("*", dst=".", src=self.INSTALL_DIR)
+
+		# Copying static and dynamic libs
+        self.copy(pattern="*.a", dst="lib", src=".", keep_path=False)
+        self.copy(pattern="*.lib", dst="lib", src=".", keep_path=False)
+        self.copy(pattern="*.dll", dst="bin", src=".", keep_path=False)
+		self.copy(pattern="*.exe", dst="bin", src=".", keep_path=False)
+        self.copy(pattern="*.so*", dst="lib", src=".", keep_path=False)
+        self.copy(pattern="*.dylib*", dst="lib", src=".", keep_path=False)      
+        
+        # Copying debug symbols
+        if self.settings.compiler == "Visual Studio":
+            self.copy(pattern="*.pdb", dst="lib", src=".", keep_path=False)
 
     def package_info(self):
         LIB_POSTFIX = ""
