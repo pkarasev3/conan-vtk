@@ -67,16 +67,16 @@ class VTKConan(ConanFile):
         self.run("%s && cmake .. -DCMAKE_INSTALL_PREFIX=../%s %s %s %s" % (cd_build, self.INSTALL_DIR, self.CMAKE_OPTIONS, CMAKE_OPTIONALS, cmake.command_line))
         self.run("%s && cmake --build . %s %s" % (cd_build, cmake.build_config, BUILD_OPTIONALS))
         self.run("%s && cmake --build . --target install %s" % (cd_build, cmake.build_config))
-
+    
     def package(self):
         self.copy("FindVTK.cmake", ".", ".")
         self.copy("*", dst=".", src=self.INSTALL_DIR)
 
-		# Copying static and dynamic libs
+        # Copying static and dynamic libs
         self.copy(pattern="*.a", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.lib", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.dll", dst="bin", src=".", keep_path=False)
-		self.copy(pattern="*.exe", dst="bin", src=".", keep_path=False)
+        self.copy(pattern="*.exe", dst="bin", src=".", keep_path=False)
         self.copy(pattern="*.so*", dst="lib", src=".", keep_path=False)
         self.copy(pattern="*.dylib*", dst="lib", src=".", keep_path=False)      
         
